@@ -1,1 +1,1 @@
-export * from './chunkedFetch';
+export * from './useDispatcher';
