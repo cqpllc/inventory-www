@@ -1,7 +1,9 @@
 type Attachment {
   createdAt: DateTime!
-  id: String!
+  id: ID!
+  item: Item!
   mime: String!
+  organization: Organization!
   size: Int!
   type: AttachmentType!
   updatedAt: DateTime!
@@ -10,7 +12,7 @@ type Attachment {
 
 input AttachmentCreateInputWithUpload {
   file: Upload!
-  item: ItemCreateNestedOneWithoutAttachmentInput!
+  item: ItemCreateNestedOneWithoutAttachmentsInput!
   type: AttachmentType!
 }
 
@@ -22,6 +24,30 @@ input AttachmentListRelationFilter {
 
 input AttachmentOrderByRelationAggregateInput {
   _count: SortOrder
+}
+
+input AttachmentOrderByWithRelationInput {
+  createdAt: SortOrder
+  id: SortOrder
+  item: ItemOrderByWithRelationInput
+  mime: SortOrder
+  organization: OrganizationOrderByWithRelationInput
+  size: SortOrder
+  type: SortOrder
+  updatedAt: SortOrder
+  url: SortOrder
+}
+
+enum AttachmentScalarFieldEnum {
+  createdAt
+  id
+  itemId
+  mime
+  organizationId
+  size
+  type
+  updatedAt
+  url
 }
 
 enum AttachmentType {
@@ -45,6 +71,10 @@ input AttachmentWhereInput {
   url: StringFilter
 }
 
+input AttachmentWhereUniqueInput {
+  id: String
+}
+
 type AuthResponse {
   expires: DateTime!
   organization: Organization!
@@ -54,8 +84,10 @@ type AuthResponse {
 type Category {
   _count: CategoryCount
   createdAt: DateTime!
-  id: String!
+  id: ID!
+  items(cursor: ItemWhereUniqueInput, distinct: [ItemScalarFieldEnum!], orderBy: [ItemOrderByWithRelationInput!], skip: Int, take: Int, where: ItemWhereInput): [Item!]!
   name: String!
+  organization: Organization!
   updatedAt: DateTime!
 }
 
@@ -181,12 +213,16 @@ input IntFilter {
 
 type Item {
   _count: ItemCount
+  attachments(cursor: AttachmentWhereUniqueInput, distinct: [AttachmentScalarFieldEnum!], orderBy: [AttachmentOrderByWithRelationInput!], skip: Int, take: Int, where: AttachmentWhereInput): [Attachment!]!
   brand: String
+  category: Category
   createdAt: DateTime!
   description: String
-  id: String!
+  id: ID!
+  itemMovements(cursor: ItemMovementWhereUniqueInput, distinct: [ItemMovementScalarFieldEnum!], orderBy: [ItemMovementOrderByWithRelationInput!], skip: Int, take: Int, where: ItemMovementWhereInput): [ItemMovement!]!
   model: String
   name: String!
+  organization: Organization!
   purcahseDate: DateTime
   purchaseCost: Float
   serial: String
@@ -195,8 +231,8 @@ type Item {
 }
 
 type ItemCount {
-  attachment: Int!
-  itemMovement: Int!
+  attachments: Int!
+  itemMovements: Int!
 }
 
 input ItemCreateInputWithCategoryAndAttachments {
@@ -212,18 +248,18 @@ input ItemCreateInputWithCategoryAndAttachments {
   tags: ItemCreatetagsInput
 }
 
-input ItemCreateNestedOneWithoutAttachmentInput {
+input ItemCreateNestedOneWithoutAttachmentsInput {
   connect: ItemWhereUniqueInput
-  connectOrCreate: ItemCreateOrConnectWithoutAttachmentInput
-  create: ItemCreateWithoutAttachmentInput
+  connectOrCreate: ItemCreateOrConnectWithoutAttachmentsInput
+  create: ItemCreateWithoutAttachmentsInput
 }
 
-input ItemCreateOrConnectWithoutAttachmentInput {
-  create: ItemCreateWithoutAttachmentInput!
+input ItemCreateOrConnectWithoutAttachmentsInput {
+  create: ItemCreateWithoutAttachmentsInput!
   where: ItemWhereUniqueInput!
 }
 
-input ItemCreateWithoutAttachmentInput {
+input ItemCreateWithoutAttachmentsInput {
   brand: String
   description: String
   model: String
@@ -244,6 +280,17 @@ input ItemListRelationFilter {
   some: ItemWhereInput
 }
 
+type ItemMovement {
+  createdAt: DateTime!
+  id: ID!
+  item: Item!
+  location: Location
+  movedAt: DateTime!
+  organization: Organization!
+  updatedAt: DateTime!
+  user: User
+}
+
 input ItemMovementListRelationFilter {
   every: ItemMovementWhereInput
   none: ItemMovementWhereInput
@@ -252,6 +299,28 @@ input ItemMovementListRelationFilter {
 
 input ItemMovementOrderByRelationAggregateInput {
   _count: SortOrder
+}
+
+input ItemMovementOrderByWithRelationInput {
+  createdAt: SortOrder
+  id: SortOrder
+  item: ItemOrderByWithRelationInput
+  location: LocationOrderByWithRelationInput
+  movedAt: SortOrder
+  organization: OrganizationOrderByWithRelationInput
+  updatedAt: SortOrder
+  user: UserOrderByWithRelationInput
+}
+
+enum ItemMovementScalarFieldEnum {
+  createdAt
+  id
+  itemId
+  locationId
+  movedAt
+  organizationId
+  updatedAt
+  userId
 }
 
 input ItemMovementWhereInput {
@@ -268,18 +337,22 @@ input ItemMovementWhereInput {
   user: UserRelationFilter
 }
 
+input ItemMovementWhereUniqueInput {
+  id: String
+}
+
 input ItemOrderByRelationAggregateInput {
   _count: SortOrder
 }
 
 input ItemOrderByWithRelationInput {
-  attachment: AttachmentOrderByRelationAggregateInput
+  attachments: AttachmentOrderByRelationAggregateInput
   brand: SortOrder
   category: CategoryOrderByWithRelationInput
   createdAt: SortOrder
   description: SortOrder
   id: SortOrder
-  itemMovement: ItemMovementOrderByRelationAggregateInput
+  itemMovements: ItemMovementOrderByRelationAggregateInput
   model: SortOrder
   name: SortOrder
   organization: OrganizationOrderByWithRelationInput
@@ -332,13 +405,13 @@ input ItemWhereInput {
   AND: [ItemWhereInput!]
   NOT: [ItemWhereInput!]
   OR: [ItemWhereInput!]
-  attachment: AttachmentListRelationFilter
+  attachments: AttachmentListRelationFilter
   brand: StringNullableFilter
   category: CategoryRelationFilter
   createdAt: DateTimeFilter
   description: StringNullableFilter
   id: StringFilter
-  itemMovement: ItemMovementListRelationFilter
+  itemMovements: ItemMovementListRelationFilter
   model: StringNullableFilter
   name: StringFilter
   organization: OrganizationRelationFilter
@@ -355,12 +428,14 @@ input ItemWhereUniqueInput {
 
 type Location {
   _count: LocationCount
-  id: String!
+  id: ID!
+  itemMovements(cursor: ItemMovementWhereUniqueInput, distinct: [ItemMovementScalarFieldEnum!], orderBy: [ItemMovementOrderByWithRelationInput!], skip: Int, take: Int, where: ItemMovementWhereInput): [ItemMovement!]!
   name: String!
+  organization: Organization!
 }
 
 type LocationCount {
-  itemMovement: Int!
+  itemMovements: Int!
 }
 
 input LocationCreateInput {
@@ -379,7 +454,7 @@ input LocationOrderByRelationAggregateInput {
 
 input LocationOrderByWithRelationInput {
   id: SortOrder
-  itemMovement: ItemMovementOrderByRelationAggregateInput
+  itemMovements: ItemMovementOrderByRelationAggregateInput
   name: SortOrder
   organization: OrganizationOrderByWithRelationInput
 }
@@ -405,7 +480,7 @@ input LocationWhereInput {
   NOT: [LocationWhereInput!]
   OR: [LocationWhereInput!]
   id: StringFilter
-  itemMovement: ItemMovementListRelationFilter
+  itemMovements: ItemMovementListRelationFilter
   name: StringFilter
   organization: OrganizationRelationFilter
 }
@@ -526,15 +601,21 @@ input NullableStringFieldUpdateOperationsInput {
 
 type Organization {
   _count: OrganizationCount
+  attachments(cursor: AttachmentWhereUniqueInput, distinct: [AttachmentScalarFieldEnum!], orderBy: [AttachmentOrderByWithRelationInput!], skip: Int, take: Int, where: AttachmentWhereInput): [Attachment!]!
+  categories(cursor: CategoryWhereUniqueInput, distinct: [CategoryScalarFieldEnum!], orderBy: [CategoryOrderByWithRelationInput!], skip: Int, take: Int, where: CategoryWhereInput): [Category!]!
   createdAt: DateTime!
-  id: String!
+  id: ID!
+  itemMovements(cursor: ItemMovementWhereUniqueInput, distinct: [ItemMovementScalarFieldEnum!], orderBy: [ItemMovementOrderByWithRelationInput!], skip: Int, take: Int, where: ItemMovementWhereInput): [ItemMovement!]!
+  items(cursor: ItemWhereUniqueInput, distinct: [ItemScalarFieldEnum!], orderBy: [ItemOrderByWithRelationInput!], skip: Int, take: Int, where: ItemWhereInput): [Item!]!
+  locations(cursor: LocationWhereUniqueInput, distinct: [LocationScalarFieldEnum!], orderBy: [LocationOrderByWithRelationInput!], skip: Int, take: Int, where: LocationWhereInput): [Location!]!
   name: String!
   updatedAt: DateTime!
+  users(cursor: UserWhereUniqueInput, distinct: [UserScalarFieldEnum!], orderBy: [UserOrderByWithRelationInput!], skip: Int, take: Int, where: UserWhereInput): [User!]!
 }
 
 type OrganizationCount {
   attachments: Int!
-  category: Int!
+  categories: Int!
   itemMovements: Int!
   items: Int!
   locations: Int!
@@ -552,7 +633,7 @@ input OrganizationCreateWithoutLocationsInput {
 
 input OrganizationOrderByWithRelationInput {
   attachments: AttachmentOrderByRelationAggregateInput
-  category: CategoryOrderByRelationAggregateInput
+  categories: CategoryOrderByRelationAggregateInput
   createdAt: SortOrder
   id: SortOrder
   itemMovements: ItemMovementOrderByRelationAggregateInput
@@ -590,7 +671,7 @@ input OrganizationWhereInput {
   NOT: [OrganizationWhereInput!]
   OR: [OrganizationWhereInput!]
   attachments: AttachmentListRelationFilter
-  category: CategoryListRelationFilter
+  categories: CategoryListRelationFilter
   createdAt: DateTimeFilter
   id: StringFilter
   itemMovements: ItemMovementListRelationFilter
@@ -671,16 +752,37 @@ input StringNullableListFilter {
 }
 
 input UniqueRequiredByIdInput {
-  id: String!
+  id: ID!
 }
 
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
 
+type User {
+  _count: UserCount
+  apiToken: String!
+  createdAt: DateTime!
+  email: String!
+  id: ID!
+  itemMovements(cursor: ItemMovementWhereUniqueInput, distinct: [ItemMovementScalarFieldEnum!], orderBy: [ItemMovementOrderByWithRelationInput!], skip: Int, take: Int, where: ItemMovementWhereInput): [ItemMovement!]!
+  name: String!
+  organization: Organization!
+  updatedAt: DateTime!
+}
+
+type UserCount {
+  itemMovements: Int!
+}
+
 input UserCreateWithoutOrganizationInput {
   email: String!
   name: String!
   password: String!
+}
+
+input UserEmailOrganizationIdCompoundUniqueInput {
+  email: String!
+  organizationId: String!
 }
 
 input UserListRelationFilter {
@@ -693,9 +795,30 @@ input UserOrderByRelationAggregateInput {
   _count: SortOrder
 }
 
+input UserOrderByWithRelationInput {
+  createdAt: SortOrder
+  email: SortOrder
+  id: SortOrder
+  name: SortOrder
+  organization: OrganizationOrderByWithRelationInput
+  password: SortOrder
+  updatedAt: SortOrder
+}
+
 input UserRelationFilter {
   is: UserWhereInput
   isNot: UserWhereInput
+}
+
+enum UserScalarFieldEnum {
+  apiToken
+  createdAt
+  email
+  id
+  name
+  organizationId
+  password
+  updatedAt
 }
 
 input UserWhereInput {
@@ -709,4 +832,9 @@ input UserWhereInput {
   organization: OrganizationRelationFilter
   password: StringFilter
   updatedAt: DateTimeFilter
+}
+
+input UserWhereUniqueInput {
+  email_organizationId: UserEmailOrganizationIdCompoundUniqueInput
+  id: String
 }

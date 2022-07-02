@@ -1,0 +1,7 @@
+#!import "./Item.gql"
+
+query Search ($where: ItemWhereInput!, $cursor: ItemWhereUniqueInput) {
+  items(where: $where, orderBy: { id: asc }, cursor: $cursor) {
+    ...Item
+  }
+}

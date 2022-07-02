@@ -1,0 +1,7 @@
+#!import "./Item.gql"
+
+query SearchLive ($tags: [String!]!) {
+  items(where: { tags: { hasSome: $tags } }) {
+    ...Item
+  }
+}

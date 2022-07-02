@@ -1,0 +1,33 @@
+fragment Item on Item {
+  id
+  tags
+  name
+  model
+  brand
+  serial
+  description
+  purcahseDate
+  purchaseCost
+  category {
+    id
+    name
+  }
+  attachments(where:{type: {equals: PHOTO}}, take: 1) {
+    id
+    url
+  }
+  itemMovements(orderBy: [{ movedAt: asc }], take: 1) {
+    id
+    movedAt
+    location {
+      id
+      name
+    }
+  }
+}
+
+query Item ($id: ID!) {
+  item(where: {id: $id}) {
+    ...Item
+  }
+}
