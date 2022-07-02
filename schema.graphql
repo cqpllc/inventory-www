@@ -1,0 +1,712 @@
+type Attachment {
+  createdAt: DateTime!
+  id: String!
+  mime: String!
+  size: Int!
+  type: AttachmentType!
+  updatedAt: DateTime!
+  url: String!
+}
+
+input AttachmentCreateInputWithUpload {
+  file: Upload!
+  item: ItemCreateNestedOneWithoutAttachmentInput!
+  type: AttachmentType!
+}
+
+input AttachmentListRelationFilter {
+  every: AttachmentWhereInput
+  none: AttachmentWhereInput
+  some: AttachmentWhereInput
+}
+
+input AttachmentOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+enum AttachmentType {
+  OTHER
+  PHOTO
+  RECEIPT
+}
+
+input AttachmentWhereInput {
+  AND: [AttachmentWhereInput!]
+  NOT: [AttachmentWhereInput!]
+  OR: [AttachmentWhereInput!]
+  createdAt: DateTimeFilter
+  id: StringFilter
+  item: ItemRelationFilter
+  mime: StringFilter
+  organization: OrganizationRelationFilter
+  size: IntFilter
+  type: EnumAttachmentTypeFilter
+  updatedAt: DateTimeFilter
+  url: StringFilter
+}
+
+type AuthResponse {
+  expires: DateTime!
+  organization: Organization!
+  token: String!
+}
+
+type Category {
+  _count: CategoryCount
+  createdAt: DateTime!
+  id: String!
+  name: String!
+  updatedAt: DateTime!
+}
+
+input CategoryConnectInput {
+  connect: CategoryWhereUniqueInput!
+}
+
+type CategoryCount {
+  items: Int!
+}
+
+input CategoryCreateInput {
+  name: String!
+}
+
+input CategoryListRelationFilter {
+  every: CategoryWhereInput
+  none: CategoryWhereInput
+  some: CategoryWhereInput
+}
+
+input CategoryOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input CategoryOrderByWithRelationInput {
+  createdAt: SortOrder
+  id: SortOrder
+  items: ItemOrderByRelationAggregateInput
+  name: SortOrder
+  organization: OrganizationOrderByWithRelationInput
+  updatedAt: SortOrder
+}
+
+input CategoryRelationFilter {
+  is: CategoryWhereInput
+  isNot: CategoryWhereInput
+}
+
+enum CategoryScalarFieldEnum {
+  createdAt
+  id
+  name
+  organizationId
+  updatedAt
+}
+
+input CategoryUpdateInput {
+  name: StringFieldUpdateOperationsInput
+}
+
+input CategoryWhereInput {
+  AND: [CategoryWhereInput!]
+  NOT: [CategoryWhereInput!]
+  OR: [CategoryWhereInput!]
+  createdAt: DateTimeFilter
+  id: StringFilter
+  items: ItemListRelationFilter
+  name: StringFilter
+  organization: OrganizationRelationFilter
+  updatedAt: DateTimeFilter
+}
+
+input CategoryWhereUniqueInput {
+  id: String
+}
+
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
+
+input DateTimeFilter {
+  equals: DateTime
+  gt: DateTime
+  gte: DateTime
+  in: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  not: NestedDateTimeFilter
+  notIn: [DateTime!]
+}
+
+input DateTimeNullableFilter {
+  equals: DateTime
+  gt: DateTime
+  gte: DateTime
+  in: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  not: NestedDateTimeNullableFilter
+  notIn: [DateTime!]
+}
+
+input EnumAttachmentTypeFilter {
+  equals: AttachmentType
+  in: [AttachmentType!]
+  not: NestedEnumAttachmentTypeFilter
+  notIn: [AttachmentType!]
+}
+
+input FloatNullableFilter {
+  equals: Float
+  gt: Float
+  gte: Float
+  in: [Float!]
+  lt: Float
+  lte: Float
+  not: NestedFloatNullableFilter
+  notIn: [Float!]
+}
+
+input IntFilter {
+  equals: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  not: NestedIntFilter
+  notIn: [Int!]
+}
+
+type Item {
+  _count: ItemCount
+  brand: String
+  createdAt: DateTime!
+  description: String
+  id: String!
+  model: String
+  name: String!
+  purcahseDate: DateTime
+  purchaseCost: Float
+  serial: String
+  tags: [String!]!
+  updatedAt: DateTime!
+}
+
+type ItemCount {
+  attachment: Int!
+  itemMovement: Int!
+}
+
+input ItemCreateInputWithCategoryAndAttachments {
+  attachments: [AttachmentCreateInputWithUpload!]
+  brand: String
+  category: CategoryConnectInput!
+  description: String
+  model: String
+  name: String!
+  purcahseDate: DateTime
+  purchaseCost: Float
+  serial: String
+  tags: ItemCreatetagsInput
+}
+
+input ItemCreateNestedOneWithoutAttachmentInput {
+  connect: ItemWhereUniqueInput
+  connectOrCreate: ItemCreateOrConnectWithoutAttachmentInput
+  create: ItemCreateWithoutAttachmentInput
+}
+
+input ItemCreateOrConnectWithoutAttachmentInput {
+  create: ItemCreateWithoutAttachmentInput!
+  where: ItemWhereUniqueInput!
+}
+
+input ItemCreateWithoutAttachmentInput {
+  brand: String
+  description: String
+  model: String
+  name: String!
+  purcahseDate: DateTime
+  purchaseCost: Float
+  serial: String
+  tags: ItemCreatetagsInput
+}
+
+input ItemCreatetagsInput {
+  set: [String!]!
+}
+
+input ItemListRelationFilter {
+  every: ItemWhereInput
+  none: ItemWhereInput
+  some: ItemWhereInput
+}
+
+input ItemMovementListRelationFilter {
+  every: ItemMovementWhereInput
+  none: ItemMovementWhereInput
+  some: ItemMovementWhereInput
+}
+
+input ItemMovementOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input ItemMovementWhereInput {
+  AND: [ItemMovementWhereInput!]
+  NOT: [ItemMovementWhereInput!]
+  OR: [ItemMovementWhereInput!]
+  createdAt: DateTimeFilter
+  id: StringFilter
+  item: ItemRelationFilter
+  location: LocationRelationFilter
+  movedAt: DateTimeFilter
+  organization: OrganizationRelationFilter
+  updatedAt: DateTimeFilter
+  user: UserRelationFilter
+}
+
+input ItemOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input ItemOrderByWithRelationInput {
+  attachment: AttachmentOrderByRelationAggregateInput
+  brand: SortOrder
+  category: CategoryOrderByWithRelationInput
+  createdAt: SortOrder
+  description: SortOrder
+  id: SortOrder
+  itemMovement: ItemMovementOrderByRelationAggregateInput
+  model: SortOrder
+  name: SortOrder
+  organization: OrganizationOrderByWithRelationInput
+  purcahseDate: SortOrder
+  purchaseCost: SortOrder
+  serial: SortOrder
+  tags: SortOrder
+  updatedAt: SortOrder
+}
+
+input ItemRelationFilter {
+  is: ItemWhereInput
+  isNot: ItemWhereInput
+}
+
+enum ItemScalarFieldEnum {
+  brand
+  categoryId
+  createdAt
+  description
+  id
+  model
+  name
+  organizationId
+  purcahseDate
+  purchaseCost
+  serial
+  tags
+  updatedAt
+}
+
+input ItemUpdateInputWithCategory {
+  brand: NullableStringFieldUpdateOperationsInput
+  category: CategoryConnectInput!
+  description: NullableStringFieldUpdateOperationsInput
+  model: NullableStringFieldUpdateOperationsInput
+  name: StringFieldUpdateOperationsInput
+  purcahseDate: NullableDateTimeFieldUpdateOperationsInput
+  purchaseCost: NullableFloatFieldUpdateOperationsInput
+  serial: NullableStringFieldUpdateOperationsInput
+  tags: ItemUpdatetagsInput
+}
+
+input ItemUpdatetagsInput {
+  push: [String!]
+  set: [String!]
+}
+
+input ItemWhereInput {
+  AND: [ItemWhereInput!]
+  NOT: [ItemWhereInput!]
+  OR: [ItemWhereInput!]
+  attachment: AttachmentListRelationFilter
+  brand: StringNullableFilter
+  category: CategoryRelationFilter
+  createdAt: DateTimeFilter
+  description: StringNullableFilter
+  id: StringFilter
+  itemMovement: ItemMovementListRelationFilter
+  model: StringNullableFilter
+  name: StringFilter
+  organization: OrganizationRelationFilter
+  purcahseDate: DateTimeNullableFilter
+  purchaseCost: FloatNullableFilter
+  serial: StringNullableFilter
+  tags: StringNullableListFilter
+  updatedAt: DateTimeFilter
+}
+
+input ItemWhereUniqueInput {
+  id: String
+}
+
+type Location {
+  _count: LocationCount
+  id: String!
+  name: String!
+}
+
+type LocationCount {
+  itemMovement: Int!
+}
+
+input LocationCreateInput {
+  name: String!
+}
+
+input LocationListRelationFilter {
+  every: LocationWhereInput
+  none: LocationWhereInput
+  some: LocationWhereInput
+}
+
+input LocationOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input LocationOrderByWithRelationInput {
+  id: SortOrder
+  itemMovement: ItemMovementOrderByRelationAggregateInput
+  name: SortOrder
+  organization: OrganizationOrderByWithRelationInput
+}
+
+input LocationRelationFilter {
+  is: LocationWhereInput
+  isNot: LocationWhereInput
+}
+
+enum LocationScalarFieldEnum {
+  id
+  name
+  organizationId
+}
+
+input LocationUpdateInput {
+  name: StringFieldUpdateOperationsInput
+  organization: OrganizationUpdateOneRequiredWithoutLocationsInput
+}
+
+input LocationWhereInput {
+  AND: [LocationWhereInput!]
+  NOT: [LocationWhereInput!]
+  OR: [LocationWhereInput!]
+  id: StringFilter
+  itemMovement: ItemMovementListRelationFilter
+  name: StringFilter
+  organization: OrganizationRelationFilter
+}
+
+input LocationWhereUniqueInput {
+  id: String
+}
+
+type Mutation {
+  categoryCreate(data: CategoryCreateInput!): Category!
+  categoryDelete(where: UniqueRequiredByIdInput!): Boolean!
+  categoryEdit(data: CategoryUpdateInput!, where: UniqueRequiredByIdInput!): Category!
+  createOrganization(name: String!, secret: String!, user: UserCreateWithoutOrganizationInput!): Organization!
+  itemAttach(data: AttachmentCreateInputWithUpload!, where: UniqueRequiredByIdInput!): Attachment!
+  itemAttachmentDelete(where: UniqueRequiredByIdInput!): Boolean!
+  itemCreate(data: ItemCreateInputWithCategoryAndAttachments!): Item!
+  itemDelete(where: UniqueRequiredByIdInput!): Boolean!
+  itemUpdate(data: ItemUpdateInputWithCategory!, where: UniqueRequiredByIdInput!): Item!
+  locationCreate(data: LocationCreateInput!): Location!
+  locationDelete(where: UniqueRequiredByIdInput!): Boolean!
+  locationEdit(data: LocationUpdateInput!, where: UniqueRequiredByIdInput!): Location!
+}
+
+input NestedDateTimeFilter {
+  equals: DateTime
+  gt: DateTime
+  gte: DateTime
+  in: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  not: NestedDateTimeFilter
+  notIn: [DateTime!]
+}
+
+input NestedDateTimeNullableFilter {
+  equals: DateTime
+  gt: DateTime
+  gte: DateTime
+  in: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  not: NestedDateTimeNullableFilter
+  notIn: [DateTime!]
+}
+
+input NestedEnumAttachmentTypeFilter {
+  equals: AttachmentType
+  in: [AttachmentType!]
+  not: NestedEnumAttachmentTypeFilter
+  notIn: [AttachmentType!]
+}
+
+input NestedFloatNullableFilter {
+  equals: Float
+  gt: Float
+  gte: Float
+  in: [Float!]
+  lt: Float
+  lte: Float
+  not: NestedFloatNullableFilter
+  notIn: [Float!]
+}
+
+input NestedIntFilter {
+  equals: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  not: NestedIntFilter
+  notIn: [Int!]
+}
+
+input NestedStringFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: NestedStringFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+input NestedStringNullableFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: NestedStringNullableFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+input NullableDateTimeFieldUpdateOperationsInput {
+  set: DateTime
+}
+
+input NullableFloatFieldUpdateOperationsInput {
+  decrement: Float
+  divide: Float
+  increment: Float
+  multiply: Float
+  set: Float
+}
+
+input NullableStringFieldUpdateOperationsInput {
+  set: String
+}
+
+type Organization {
+  _count: OrganizationCount
+  createdAt: DateTime!
+  id: String!
+  name: String!
+  updatedAt: DateTime!
+}
+
+type OrganizationCount {
+  attachments: Int!
+  category: Int!
+  itemMovements: Int!
+  items: Int!
+  locations: Int!
+  users: Int!
+}
+
+input OrganizationCreateOrConnectWithoutLocationsInput {
+  create: OrganizationCreateWithoutLocationsInput!
+  where: OrganizationWhereUniqueInput!
+}
+
+input OrganizationCreateWithoutLocationsInput {
+  name: String!
+}
+
+input OrganizationOrderByWithRelationInput {
+  attachments: AttachmentOrderByRelationAggregateInput
+  category: CategoryOrderByRelationAggregateInput
+  createdAt: SortOrder
+  id: SortOrder
+  itemMovements: ItemMovementOrderByRelationAggregateInput
+  items: ItemOrderByRelationAggregateInput
+  locations: LocationOrderByRelationAggregateInput
+  name: SortOrder
+  updatedAt: SortOrder
+  users: UserOrderByRelationAggregateInput
+}
+
+input OrganizationRelationFilter {
+  is: OrganizationWhereInput
+  isNot: OrganizationWhereInput
+}
+
+input OrganizationUpdateOneRequiredWithoutLocationsInput {
+  connect: OrganizationWhereUniqueInput
+  connectOrCreate: OrganizationCreateOrConnectWithoutLocationsInput
+  create: OrganizationCreateWithoutLocationsInput
+  update: OrganizationUpdateWithoutLocationsInput
+  upsert: OrganizationUpsertWithoutLocationsInput
+}
+
+input OrganizationUpdateWithoutLocationsInput {
+  name: StringFieldUpdateOperationsInput
+}
+
+input OrganizationUpsertWithoutLocationsInput {
+  create: OrganizationCreateWithoutLocationsInput!
+  update: OrganizationUpdateWithoutLocationsInput!
+}
+
+input OrganizationWhereInput {
+  AND: [OrganizationWhereInput!]
+  NOT: [OrganizationWhereInput!]
+  OR: [OrganizationWhereInput!]
+  attachments: AttachmentListRelationFilter
+  category: CategoryListRelationFilter
+  createdAt: DateTimeFilter
+  id: StringFilter
+  itemMovements: ItemMovementListRelationFilter
+  items: ItemListRelationFilter
+  locations: LocationListRelationFilter
+  name: StringFilter
+  updatedAt: DateTimeFilter
+  users: UserListRelationFilter
+}
+
+input OrganizationWhereUniqueInput {
+  id: String
+}
+
+type Query {
+  apiLogin(apiToken: String!): AuthResponse!
+  categories(cursor: CategoryWhereUniqueInput, distinct: [CategoryScalarFieldEnum!], orderBy: [CategoryOrderByWithRelationInput!], skip: Int, take: Int, where: CategoryWhereInput): [Category!]!
+  category(where: UniqueRequiredByIdInput!): Category!
+  item(where: UniqueRequiredByIdInput!): Item!
+  items(cursor: ItemWhereUniqueInput, distinct: [ItemScalarFieldEnum!], orderBy: [ItemOrderByWithRelationInput!], skip: Int, take: Int, where: ItemWhereInput): [Item!]!
+  location(where: UniqueRequiredByIdInput!): Location!
+  locations(cursor: LocationWhereUniqueInput, distinct: [LocationScalarFieldEnum!], orderBy: [LocationOrderByWithRelationInput!], skip: Int, take: Int, where: LocationWhereInput): [Location!]!
+  login(email: String!, organizationId: String, password: String!): AuthResponse!
+  loginOrganizations(email: String!, password: String!): [Organization!]!
+  organization: Organization!
+}
+
+enum QueryMode {
+  default
+  insensitive
+}
+
+enum SortOrder {
+  asc
+  desc
+}
+
+input StringFieldUpdateOperationsInput {
+  set: String
+}
+
+input StringFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  mode: QueryMode
+  not: NestedStringFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+input StringNullableFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  mode: QueryMode
+  not: NestedStringNullableFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+input StringNullableListFilter {
+  equals: [String!]
+  has: String
+  hasEvery: [String!]
+  hasSome: [String!]
+  isEmpty: Boolean
+}
+
+input UniqueRequiredByIdInput {
+  id: String!
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+input UserCreateWithoutOrganizationInput {
+  email: String!
+  name: String!
+  password: String!
+}
+
+input UserListRelationFilter {
+  every: UserWhereInput
+  none: UserWhereInput
+  some: UserWhereInput
+}
+
+input UserOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input UserRelationFilter {
+  is: UserWhereInput
+  isNot: UserWhereInput
+}
+
+input UserWhereInput {
+  AND: [UserWhereInput!]
+  NOT: [UserWhereInput!]
+  OR: [UserWhereInput!]
+  createdAt: DateTimeFilter
+  email: StringFilter
+  id: StringFilter
+  name: StringFilter
+  organization: OrganizationRelationFilter
+  password: StringFilter
+  updatedAt: DateTimeFilter
+}

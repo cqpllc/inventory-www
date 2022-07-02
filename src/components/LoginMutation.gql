@@ -1,0 +1,13 @@
+query Login($email: String!, $password: String!, $organizationId: String) {
+  login (email: $email, password: $password, organizationId: $organizationId) {
+    token
+    expires
+  }
+}
+
+query LoginOrganizations($email: String!, $password: String!) {
+  loginOrganizations(email: $email, password: $password) {
+    id
+    name
+  }
+}

@@ -1,0 +1,6 @@
+query PageBasicInfo {
+  organization {
+    id
+    name
+  }
+}

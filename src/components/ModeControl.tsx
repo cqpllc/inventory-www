@@ -20,7 +20,7 @@ export function ModeControl(props: ChakraProps) {
           h={24}
           isLoading={loading && loadingMode === m}
           isDisabled={loading}
-          colorScheme={mode === m ? 'green' : 'gray'}
+          colorScheme={mode === m ? 'cyan' : 'gray'}
         >
           {m === null ? 'None' : m.toString()[0].toUpperCase() + m.toString().slice(1)}
         </Button>

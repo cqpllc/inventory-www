@@ -1,0 +1,52 @@
+overwrite: true
+schema: "${NEXT_PUBLIC_GRAPHQL}"
+config:
+  strictScalars: true
+  scalars:
+    DateTime: DateTime
+    Upload: GraphQLScalarType
+  content: "import { DateTime } from 'luxon';\nimport { GraphQLScalarType } from 'graphql-upload';"
+
+generates:
+  # Download the schema for GraphQL IDE plugins
+  schema.graphql:
+    plugins:
+      - schema-ast
+
+  src/.generated/graphql/schema.json:
+    plugins:
+      - "introspection"
+    config:
+      minify: true
+
+  # Global types
+  src/.generated/graphql/schema.ts:
+    plugins:
+      - typescript
+      - add
+
+  # Colocate Typescript types/interfaces with components
+  ./:
+    documents:
+      - src/components/*.gql
+    preset: near-operation-file
+    presetConfig:
+      extension: .query.ts
+      baseTypesPath: src/.generated/graphql/schema.ts
+    plugins:
+      - typescript-operations
+      - typescript-react-apollo
+      - add
+
+  # For pages, we generate one Typescript file. This simplifies fetching, but also NextJS doesn't allow colocating the
+  # .query.ts files (it tries to build them, and there's no ignore option).
+  src/.generated/graphql/pageQueries.ts:
+    documents: "src/**/*.gql"
+    preset: import-types
+    presetConfig:
+      baseTypesPath: src/.generated/graphql/schema.ts
+      typesPath: ./types
+    plugins:
+      - typescript-operations
+      - typescript-react-apollo
+      - add
