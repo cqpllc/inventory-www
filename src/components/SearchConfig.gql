@@ -1,0 +1,6 @@
+query SearchConfigOptions {
+  categories {
+    id
+    name
+  }
+}

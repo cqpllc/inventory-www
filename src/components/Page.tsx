@@ -1,10 +1,10 @@
 import Head from 'next/head';
 import {Box, ChakraProps, Flex, Heading, Link, useColorMode} from '@chakra-ui/react';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { usePageBasicInfoQuery } from './Page.query';
 import { useLogin } from './LoginContext';
 import { RfidConfig } from './RfidConfig';
-import { useToggle } from 'react-use';
+import { SearchConfig } from './SearchConfig';
 import { useRfid } from './RfidContext';
 
 interface PageProps extends ChakraProps {
@@ -12,12 +12,17 @@ interface PageProps extends ChakraProps {
   title?: string
 }
 
+enum ToolbarOption {
+  Rfid,
+  Search
+}
+
 export function Page({ children, title, ...props }: PageProps) {
   const { logout } = useLogin();
   const { colorMode } = useColorMode();
   const { data } = usePageBasicInfoQuery();
   const { connected } = useRfid();
-  const [ wsConfigOpen, toggleConfig ] = useToggle(false);
+  const [toolbar, setToolbar] = useState<Nullable<ToolbarOption>>(null);
 
 
   return (
@@ -46,7 +51,19 @@ export function Page({ children, title, ...props }: PageProps) {
             <Link
               fontStyle="italic"
               fontSize="sm"
-              onClick={() => !connected && toggleConfig()}
+              onClick={() => setToolbar(toolbar === ToolbarOption.Search ? null : ToolbarOption.Search)}
+              fontFamily="monospace"
+              mr={4}
+            >
+              Search
+            </Link>
+            <Link
+              fontStyle="italic"
+              fontSize="sm"
+              onClick={() => {
+                if (connected) return;
+                setToolbar(toolbar === ToolbarOption.Rfid ? null : ToolbarOption.Rfid);
+              }}
               fontFamily="monospace"
               mr={4}
             >
@@ -63,7 +80,8 @@ export function Page({ children, title, ...props }: PageProps) {
           </Box>
         </Flex>
       </Box>
-      {(wsConfigOpen || connected) && <RfidConfig />}
+      {(toolbar === ToolbarOption.Rfid || connected) && <RfidConfig />}
+      {(toolbar === ToolbarOption.Search && !connected) && <SearchConfig />}
       <Box p={4}>{children}</Box>
       <Box
         m={8}
