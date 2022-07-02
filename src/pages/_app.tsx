@@ -1,17 +1,16 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import type { AppProps } from 'next/app';
 import { LoginProvider } from '../components/LoginContext';
-import { WebSocketProvider } from '../components/WebSocketContext';
+import { RfidProvider } from '../components/RfidContext';
 import theme from '../theme';
-import config from '../config';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider theme={theme}>
       <LoginProvider>
-        <WebSocketProvider>
+        <RfidProvider>
           <Component {...pageProps} />
-        </WebSocketProvider>
+        </RfidProvider>
       </LoginProvider>
     </ChakraProvider>
   )

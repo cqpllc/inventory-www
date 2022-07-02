@@ -7,28 +7,37 @@ import { Event, CommandEvent, WssMode } from '../@types';
 
 type CallFn = (event: CommandEvent, onReply?: DispatcherCallback) => any;
 
-export const WebSocketContext = createContext<{
+export const RfidContext = createContext<{
   call: CallFn,
   tags: string[],
   mode: WssMode | null,
+  connecting: boolean,
+  connected: boolean,
+  setUrl: (url: Nullable<string>) => void,
 }>({
   call: () => {},
   tags: [],
   mode: null,
+  connecting: false,
+  connected: false,
+  setUrl: () => {},
 });
 
-export interface WebSocketProviderProps {
+export interface RfidProviderProps {
   children: ReactNode
 }
 
-export function WebSocketProvider({ children }: WebSocketProviderProps) {
+export function RfidProvider({ children }: RfidProviderProps) {
+  const [socketUrl, setSocketUrl] = useState<Nullable<string>>(null);
   const [tags, setTags] = useState<string[]>([]);
   const [mode, setMode] = useState<WssMode | null>(null);
-  const { getWebSocket, sendJsonMessage } = useWebSocketNative(process.env.NEXT_PUBLIC_API_WS!, {
-    shouldReconnect: () => true,
+  const { getWebSocket, sendJsonMessage } = useWebSocketNative(socketUrl, {
+    shouldReconnect: () => Boolean(socketUrl),
     share: false,
-  });
+  }, Boolean(socketUrl));
   const ws = getWebSocket();
+
+  useEffect(() => { if (!socketUrl && ws) ws.close(); }, [ws, socketUrl]);
 
   const { addReplyListener, dispatchReply, isReply } = useDispatcher();
 
@@ -56,14 +65,17 @@ export function WebSocketProvider({ children }: WebSocketProviderProps) {
   }, [ws]);
 
   return (
-    <WebSocketContext.Provider value={{
+    <RfidContext.Provider value={{
       call,
       tags,
       mode,
+      connected: Boolean(socketUrl) && Boolean(ws?.OPEN),
+      connecting: Boolean(socketUrl) && Boolean(ws?.CONNECTING),
+      setUrl: setSocketUrl,
     }}>
       {children}
-    </WebSocketContext.Provider>
+    </RfidContext.Provider>
   )
 }
 
-export const useWebSocket = () => useContext(WebSocketContext);
+export const useRfid = () => useContext(RfidContext);

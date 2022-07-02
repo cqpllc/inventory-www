@@ -3,6 +3,9 @@ import {Box, ChakraProps, Flex, Heading, Link, useColorMode} from '@chakra-ui/re
 import { ReactNode } from 'react';
 import { usePageBasicInfoQuery } from './Page.query';
 import { useLogin } from './LoginContext';
+import { RfidConfig } from './RfidConfig';
+import { useToggle } from 'react-use';
+import { useRfid } from './RfidContext';
 
 interface PageProps extends ChakraProps {
   children: ReactNode
@@ -13,6 +16,8 @@ export function Page({ children, title, ...props }: PageProps) {
   const { logout } = useLogin();
   const { colorMode } = useColorMode();
   const { data } = usePageBasicInfoQuery();
+  const { connected } = useRfid();
+  const [ wsConfigOpen, toggleConfig ] = useToggle(false);
 
 
   return (
@@ -41,6 +46,15 @@ export function Page({ children, title, ...props }: PageProps) {
             <Link
               fontStyle="italic"
               fontSize="sm"
+              onClick={() => !connected && toggleConfig()}
+              fontFamily="monospace"
+              mr={4}
+            >
+              {connected ? 'RFID Connected' : 'Connect RFID'}
+            </Link>
+            <Link
+              fontStyle="italic"
+              fontSize="sm"
               onClick={logout}
               fontFamily="monospace"
             >
@@ -49,7 +63,17 @@ export function Page({ children, title, ...props }: PageProps) {
           </Box>
         </Flex>
       </Box>
+      {(wsConfigOpen || connected) && <RfidConfig />}
       <Box p={4}>{children}</Box>
+      <Box
+        m={8}
+        color="gray.500"
+        fontFamily="monospace"
+        fontSize="xs"
+        textAlign="center"
+      >
+        &copy; Concept Quantophysics
+      </Box>
     </Box>
   );
 }

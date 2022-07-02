@@ -1,28 +1,29 @@
 import { useState } from 'react';
 import {Box, Grid, Button, List, ListItem, ChakraProps} from '@chakra-ui/react';
-import { useWebSocket } from '../components/WebSocketContext';
+import { useRfid } from './RfidContext';
 import { WssMode } from '../@types';
 
-export function ModeControl(props: ChakraProps) {
+export function RfidModeControl(props: ChakraProps) {
   const [loading, setLoading] = useState(false);
   const [loadingMode, setLoadingMode] = useState<string | null>(null);
-  const { call, mode } = useWebSocket();
+  const { call, mode, connected } = useRfid();
 
   return (
-    <Grid templateColumns={`repeat(${Object.entries(WssMode).length + 1}, 1fr)`} gap={8} {...props}>
+    <Grid templateColumns={`repeat(${Object.entries(WssMode).length + 1}, 1fr)`} gap={2} {...props}>
       {[null, ...Object.values(WssMode)].map(m => (
         <Button
+          key={m || 'pause'}
           onClick={() => {
             setLoading(true);
             setLoadingMode(m);
             call({ event: 'setMode', data: { mode: m as unknown as (WssMode | null) } }, () => setLoading(false));
           }}
-          h={24}
+          size="xs"
           isLoading={loading && loadingMode === m}
-          isDisabled={loading}
+          isDisabled={loading || !connected}
           colorScheme={mode === m ? 'cyan' : 'gray'}
         >
-          {m === null ? 'None' : m.toString()[0].toUpperCase() + m.toString().slice(1)}
+          {m === null ? 'Pause' : m.toString()[0].toUpperCase() + m.toString().slice(1)}
         </Button>
       ))}
     </Grid>
