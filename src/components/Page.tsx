@@ -1,5 +1,6 @@
 import Head from 'next/head';
-import {Box, ChakraProps, Flex, Heading, Link, useColorMode} from '@chakra-ui/react';
+import { Box, ChakraProps, Flex, Heading, Link, Icon, useColorMode } from '@chakra-ui/react';
+import { IoBarcode, IoBarcodeOutline, IoLogOut, IoSearch } from 'react-icons/io5';
 import { ReactNode, useState } from 'react';
 import { usePageBasicInfoQuery } from './Page.query';
 import { useLogin } from './LoginContext';
@@ -51,30 +52,41 @@ export function Page({ children, title, ...props }: PageProps) {
             <Link
               fontStyle="italic"
               fontSize="sm"
-              onClick={() => setToolbar(toolbar === ToolbarOption.Search ? null : ToolbarOption.Search)}
               fontFamily="monospace"
-              mr={4}
+              mr={6}
+              borderBottomColor={colorMode === 'dark' ? 'cyan.200' : 'cyan.900'}
+              _hover={{ borderBottomColor: colorMode === 'dark' ? 'cyan.800' : 'cyan.400', borderBottomWidth: 1 }}
+              onClick={() => setToolbar(toolbar === ToolbarOption.Search ? null : ToolbarOption.Search)}
+              borderBottomWidth={toolbar === ToolbarOption.Search ? 1 : undefined}
             >
+              <Icon as={IoSearch} fontSize="lg" position="relative" top="0.2em" mr={1} />
               Search
             </Link>
             <Link
               fontStyle="italic"
               fontSize="sm"
+              fontFamily="monospace"
+              mr={6}
+              borderBottomColor={colorMode === 'dark' ? 'cyan.200' : 'cyan.900'}
+              _hover={{ borderBottomColor: colorMode === 'dark' ? 'cyan.800' : 'cyan.400', borderBottomWidth: 1 }}
               onClick={() => {
                 if (connected) return;
                 setToolbar(toolbar === ToolbarOption.Rfid ? null : ToolbarOption.Rfid);
               }}
-              fontFamily="monospace"
-              mr={4}
+              borderBottomWidth={connected || toolbar === ToolbarOption.Rfid ? 1 : undefined}
             >
-              {connected ? 'RFID Connected' : 'Connect RFID'}
+              <Icon as={IoBarcodeOutline} fontSize="lg" position="relative" top="0.2em" mr={1} />
+              RFID
             </Link>
             <Link
               fontStyle="italic"
               fontSize="sm"
-              onClick={logout}
               fontFamily="monospace"
+              borderBottomColor={colorMode === 'dark' ? 'cyan.200' : 'cyan.900'}
+              _hover={{ borderBottomColor: colorMode === 'dark' ? 'cyan.800' : 'cyan.400', borderBottomWidth: 1 }}
+              onClick={logout}
             >
+              <Icon as={IoLogOut} fontSize="lg" position="relative" top="0.2em" mr={1} />
               Logout
             </Link>
           </Box>

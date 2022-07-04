@@ -31,3 +31,7 @@ query Item ($id: ID!) {
     ...Item
   }
 }
+
+mutation ItemUpdate ($id: ID!, $data: ItemUpdateInputWithCategory!) {
+  itemUpdate(where: {id: $id}, data: $data) { ...Item }
+}

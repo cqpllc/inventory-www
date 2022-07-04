@@ -386,7 +386,7 @@ enum ItemScalarFieldEnum {
 
 input ItemUpdateInputWithCategory {
   brand: NullableStringFieldUpdateOperationsInput
-  category: CategoryConnectInput!
+  category: CategoryConnectInput
   description: NullableStringFieldUpdateOperationsInput
   model: NullableStringFieldUpdateOperationsInput
   name: StringFieldUpdateOperationsInput
